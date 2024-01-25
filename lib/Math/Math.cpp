@@ -22,3 +22,5 @@ uint8_t MathClass::mix(uint8_t abcd, uint8_t efgh)
     result |= (efgh & 0b00001000) << 3;
     return result;
 }
+
+MathClass Math;
