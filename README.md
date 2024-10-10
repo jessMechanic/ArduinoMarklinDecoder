@@ -2,14 +2,22 @@
 
 ## goal
 
-the goal of this project is to make an opensource easy to build controller for marklin model rail ways. This would be a replacement for the current closed source (and expensive) options provided by marklin.
+A cheap opensource decoder for the marklin model trains. based on atmelmega micro controller.
 
 ## status 
 
-this is currently unfinished and has no working component at this point
+this is currently in a working condintion but open to implovements
+this due to my own circumstances has only be tested on a 60651 Marklin Digital Mobil Station Controller.
+
+## current state
+- custom addres
+- support for lights, sound and general functions keys.
+
 
 ## future plans
-- controlling a train
-- controlling multible trains
-- web interface
-- multible clients
+ a smaller design of the pcb to give support for a wider support
+
+
+
+
+ 
