@@ -52,10 +52,12 @@ void setup_timer1()
   // Set CS12, CS11 and CS10 bits for 8 prescaler
   TCCR1B |= (0 << CS12) | (1 << CS11) | (0 << CS10);
 }
+
 void reset_timer()
 {
   TCNT0 = 0;
 }
+
 void start_timer()
 {
   reset_timer();           // initialize counter value to 0
@@ -67,11 +69,11 @@ void stop_timer()
   TIMSK0 &= ~(1 << OCIE0A); // disable timer compare interrupt
 }
 
-void setup_int0_falling_edge()
+void setup_int0_logic_change()
 {
   EICRA = 0;
   EIMSK = 0;
-  EICRA |= (1 << ISC01); // set INT0 to trigger on falling edge
+  EICRA |= (1 << ISC00); // set INT0 to trigger on logic change
   EIMSK |= (1 << INT0);  // enable INT0 interrupt
 }
 
@@ -90,13 +92,17 @@ ISR(INT0_vect)
 {
 
   start_timer();
+  uint8_t timerValue = TCNT0;
   reset_timer();
-  _delay_us(100);
   binary = binary << 1;
-  if (!(PIND & (1 << PIND2)))
+  if (timerValue > 100)
   {
     binary |= 1;
   }
+  // if (!(PIND & (1 << PIND2)))
+  // {
+  //   binary |= 1;
+  // }
   sample_size++;
 }
 
@@ -116,6 +122,7 @@ void set_speed()
     TCCR1A &= ~((1 << COM1A0) | (0 << COM1A1));
   }
 }
+
 void handle_speed(uint8_t DCBA, uint8_t EFGH)
 {
   int train_speed_loc = DCBA == 0 ? DCBA : DCBA - 1;
@@ -135,6 +142,7 @@ void handle_speed(uint8_t DCBA, uint8_t EFGH)
     set_speed();
   }
 }
+
 void handle_functions(uint8_t EFGH)
 {
   // different functions
@@ -208,6 +216,7 @@ void handle_binary()
     handle_functions(EFGH);
   }
 }
+
 int main(void)
 {
   Serial.begin(9600);
@@ -224,7 +233,7 @@ int main(void)
   PORTB |= (1 << PORTB4); // set pin miso to high
   setup_timer0();
   setup_timer1();
-  setup_int0_falling_edge();
+  setup_int0_logic_change();
   start_timer();
   sei(); // enable global interrupts
   while (1)
@@ -234,7 +243,9 @@ int main(void)
       sample_done = false;
       if (sample_size == 18)
       {
-        handle_binary();
+        Serial.print(sample_size);
+        Serial.println(binary, BIN);
+        // handle_binary();
         binary = 0;
       }
       sample_size = 0;
