@@ -15,8 +15,8 @@ this due to my own circumstances has only be tested on a 60651 Marklin Digital M
 
 
 ## future plans
- a smaller design of the pcb to give support for a wider support
-
+a smaller design of the pcb to give support for a wider support
+change pcb design to support other than 5v motors (this can currently be fixed by using a jumper wire from the v-in to a lifted leg of the motor driver)
 
 
 
